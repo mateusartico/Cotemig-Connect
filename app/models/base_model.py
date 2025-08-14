@@ -1,7 +1,8 @@
 from app.models.database import db
-from datetime import datetime
+from datetime import datetime, timedelta
 import bcrypt
 import re
+import secrets
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -63,3 +64,26 @@ class User(db.Model):
             'email': self.email,
             'tipo_usuario': self.tipo_usuario
         }
+
+class PasswordResetToken(db.Model):
+    __tablename__ = 'password_reset_tokens'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    token = db.Column(db.String(100), unique=True, nullable=False)
+    expires_at = db.Column(db.DateTime, nullable=False)
+    used = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    user = db.relationship('User', backref='reset_tokens')
+    
+    def __init__(self, user_id):
+        self.user_id = user_id
+        self.token = secrets.token_urlsafe(32)
+        self.expires_at = datetime.utcnow() + timedelta(hours=1)  # Expira em 1 hora
+    
+    def is_valid(self):
+        return not self.used and datetime.utcnow() < self.expires_at
+    
+    def mark_as_used(self):
+        self.used = True

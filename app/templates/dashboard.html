@@ -1,34 +1,179 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Cotemig Connect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header do Dashboard -->
+        <header class="dashboard-header">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <span>{{ session.user_nome[0].upper() }}</span>
+                </div>
+                <div class="user-details">
+                    <h2>Olá, {{ session.user_nome.split()[0] }}!</h2>
+                    <span class="user-badge user-badge-{{ session.user_tipo }}">
+                        {{ session.user_tipo.title() }}
+                    </span>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">
+                <span>Sair</span>
+            </button>
+        </header>
 
-{% block title %}Dashboard - Cotemig Connect{% endblock %}
+        <!-- Menu de Navegação -->
+        <nav class="dashboard-nav">
+            <div class="nav-item active" data-section="home">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-text">Início</span>
+            </div>
+            <div class="nav-item" data-section="profile">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">Perfil</span>
+            </div>
+            <div class="nav-item" data-section="connect">
+                <span class="nav-icon">🤝</span>
+                <span class="nav-text">Conectar</span>
+            </div>
+            <div class="nav-item" data-section="activities">
+                <span class="nav-icon">📚</span>
+                <span class="nav-text">Atividades</span>
+            </div>
+        </nav>
 
-{% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
-{% endblock %}
+        <!-- Conteúdo Principal -->
+        <main class="dashboard-main">
+            <!-- Seção Início -->
+            <section id="home" class="dashboard-section active">
+                <div class="welcome-card">
+                    <h3>Bem-vindo ao Cotemig Connect</h3>
+                    <p>Sua plataforma de conexão acadêmica</p>
+                </div>
 
-{% block content %}
-<div class="container">
-    <div class="dashboard-header">
-        <h1>Bem-vindo, {{ session.user_nome }}!</h1>
-        <p>Tipo de usuário: <span class="user-type">{{ session.user_tipo.title() }}</span></p>
-        <a href="{{ url_for('auth.logout') }}" class="btn-secondary">Sair</a>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-info">
+                            <span class="stat-number">0</span>
+                            <span class="stat-label">Conexões</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📖</div>
+                        <div class="stat-info">
+                            <span class="stat-number">0</span>
+                            <span class="stat-label">Atividades</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💬</div>
+                        <div class="stat-info">
+                            <span class="stat-number">0</span>
+                            <span class="stat-label">Mensagens</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h4>Ações Rápidas</h4>
+                    <div class="action-grid">
+                        <button class="action-btn" onclick="switchSection('profile')">
+                            <span class="action-icon">✏️</span>
+                            <span>Editar Perfil</span>
+                        </button>
+                        <button class="action-btn" onclick="switchSection('connect')">
+                            <span class="action-icon">🔍</span>
+                            <span>Buscar Pessoas</span>
+                        </button>
+                        <button class="action-btn" onclick="switchSection('activities')">
+                            <span class="action-icon">📝</span>
+                            <span>Ver Atividades</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção Perfil -->
+            <section id="profile" class="dashboard-section">
+                <div class="section-header">
+                    <h3>Meu Perfil</h3>
+                    <p>Gerencie suas informações pessoais</p>
+                </div>
+                
+                <!-- Visualização do Perfil -->
+                <div id="profile-view" class="profile-card">
+                    <div class="profile-avatar">
+                        <span id="profile-avatar-text">{{ session.user_nome[0].upper() }}</span>
+                    </div>
+                    <div class="profile-info">
+                        <h4 id="profile-name">{{ session.user_nome }}</h4>
+                        <p id="profile-email">{{ session.user_email if session.user_email else 'Carregando...' }}</p>
+                        <p id="profile-matricula"></p>
+                        <span class="profile-badge">{{ session.user_tipo.title() }}</span>
+                    </div>
+                    <button class="edit-profile-btn" onclick="showEditForm()">✏️ Editar Perfil</button>
+                </div>
+
+                <!-- Formulário de Edição -->
+                <div id="profile-edit" class="profile-edit-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="edit-nome">Nome Completo</label>
+                        <input type="text" id="edit-nome" class="form-control" placeholder="Digite seu nome">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-email">Email (não editável)</label>
+                        <input type="email" id="edit-email" class="form-control" disabled>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-senha">Nova Senha (opcional)</label>
+                        <input type="password" id="edit-senha" class="form-control" placeholder="Digite nova senha">
+                        <div class="form-hint">Deixe em branco para manter a senha atual</div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn-save" onclick="saveProfile()">💾 Salvar</button>
+                        <button class="btn-cancel" onclick="cancelEdit()">❌ Cancelar</button>
+                    </div>
+                </div>
+                
+                <!-- Loading -->
+                <div id="profile-loading" class="loading" style="display: none;">
+                    <p>Salvando...</p>
+                </div>
+            </section>
+
+            <!-- Seção Conectar -->
+            <section id="connect" class="dashboard-section">
+                <div class="section-header">
+                    <h3>Conectar</h3>
+                    <p>Encontre outros estudantes e professores</p>
+                </div>
+                <div class="coming-soon">
+                    <p>🚧 Sistema de conexões em desenvolvimento</p>
+                </div>
+            </section>
+
+            <!-- Seção Atividades -->
+            <section id="activities" class="dashboard-section">
+                <div class="section-header">
+                    <h3>Atividades</h3>
+                    <p>Acompanhe suas atividades acadêmicas</p>
+                </div>
+                <div class="coming-soon">
+                    <p>🚧 Sistema de atividades em desenvolvimento</p>
+                </div>
+            </section>
+        </main>
     </div>
-    
-    <div class="dashboard-content">
-        <div class="feature-card">
-            <h3>Seu Perfil</h3>
-            <p>Gerencie suas informações pessoais</p>
-        </div>
-        
-        <div class="feature-card">
-            <h3>Conectar</h3>
-            <p>Encontre outros estudantes e professores</p>
-        </div>
-        
-        <div class="feature-card">
-            <h3>Atividades</h3>
-            <p>Veja suas atividades recentes</p>
-        </div>
-    </div>
-</div>
-{% endblock %}
+
+    <script src="{{ url_for('static', filename='js/pages/dashboard.js') }}"></script>
+</body>
+</html>

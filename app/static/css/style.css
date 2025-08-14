@@ -19,6 +19,11 @@ body {
     --cotemig-white: #ffffff;
 }
 
+/* Reset adicional para dashboard */
+button {
+    font-family: inherit;
+}
+
 /* Container principal */
 .container {
     max-width: 1200px;
