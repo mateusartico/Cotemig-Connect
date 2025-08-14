@@ -1,0 +1,225 @@
+/* Importar fonte Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Estilos específicos para autenticação - Design Simples */
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cotemig-green);
+    padding: 1rem;
+}
+
+.auth-card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 20px;
+    border: 1px solid #e9ecef;
+    width: 100%;
+    max-width: 400px;
+}
+
+.auth-logo {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-logo h1 {
+    color: var(--cotemig-green);
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.auth-logo p {
+    color: #6c757d;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--cotemig-dark);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--cotemig-green);
+}
+
+.form-control.error {
+    border-color: #dc3545;
+}
+
+.form-control::placeholder {
+    color: #adb5bd;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+}
+
+.form-hint {
+    color: #6c757d;
+    font-size: 0.75rem;
+    margin-top: 0.3rem;
+}
+
+.auth-submit {
+    width: 100%;
+    background-color: var(--cotemig-green);
+    color: white;
+    border: none;
+    padding: 0.9rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.auth-submit:hover {
+    background-color: #5a9e35;
+    transform: translateY(-1px);
+}
+
+.auth-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.auth-link p {
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.auth-link a {
+    color: var(--cotemig-green);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-link a:hover {
+    text-decoration: underline;
+}
+
+.flash-messages {
+    margin-bottom: 1rem;
+}
+
+.flash-message {
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.flash-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.flash-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Indicador de força da senha */
+.password-strength {
+    margin-top: 0.5rem;
+    height: 3px;
+    background: #e9ecef;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.password-strength-bar {
+    height: 100%;
+    width: 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.password-strength-text {
+    font-size: 0.75rem;
+    margin-top: 0.3rem;
+    font-weight: 500;
+}
+
+.password-strength-weak .password-strength-bar {
+    width: 33%;
+    background: #dc3545;
+}
+
+.password-strength-weak .password-strength-text {
+    color: #dc3545;
+}
+
+.password-strength-medium .password-strength-bar {
+    width: 66%;
+    background: #ffc107;
+}
+
+.password-strength-medium .password-strength-text {
+    color: #ffc107;
+}
+
+.password-strength-strong .password-strength-bar {
+    width: 100%;
+    background: var(--cotemig-green);
+}
+
+.password-strength-strong .password-strength-text {
+    color: var(--cotemig-green);
+}
+
+/* Responsividade mobile */
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 1rem;
+    }
+    
+    .auth-card {
+        padding: 2rem 1.5rem;
+    }
+    
+    .auth-logo h1 {
+        font-size: 1.6rem;
+    }
+    
+    .form-control {
+        font-size: 16px; /* Evita zoom no iOS */
+    }
+}

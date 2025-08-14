@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Cotemig Connect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/password-toggle.css') }}">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <h1>Cotemig Connect</h1>
+                <p>Crie sua conta</p>
+            </div>
+
+            <div class="flash-messages">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="flash-message flash-{{ 'success' if category == 'success' else 'error' }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <form method="POST" id="cadastroForm">
+                {{ form.hidden_tag() }}
+                
+                <div class="form-group">
+                    {{ form.nome.label(class="form-label") }}
+                    {{ form.nome(class="form-control" + (" error" if form.nome.errors else ""), placeholder="Digite seu nome completo") }}
+                    {% if form.nome.errors %}
+                        {% for error in form.nome.errors %}
+                            <div class="error-message">{{ error }}</div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="form-hint">Como você gostaria de ser chamado</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control" + (" error" if form.email.errors else ""), placeholder="12345678@aluno.cotemig.com.br") }}
+                    {% if form.email.errors %}
+                        {% for error in form.email.errors %}
+                            <div class="error-message">{{ error }}</div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="form-hint">Alunos: matrícula@aluno.cotemig.com.br | Funcionários: usuario@cotemig.com.br</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.senha.label(class="form-label") }}
+                    <div class="password-input-container">
+                        {{ form.senha(class="form-control" + (" error" if form.senha.errors else ""), placeholder="Crie uma senha segura", id="senha") }}
+                        <button type="button" class="password-toggle" onclick="togglePassword('senha')">
+                            <span id="senha-toggle-icon">Mostrar</span>
+                        </button>
+                    </div>
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="password-strength-bar"></div>
+                    </div>
+                    <div class="password-strength-text" id="passwordStrengthText"></div>
+                    {% if form.senha.errors %}
+                        {% for error in form.senha.errors %}
+                            <div class="error-message">{{ error }}</div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="form-hint">Mínimo 6 caracteres, use letras, números e símbolos</div>
+                    {% endif %}
+                </div>
+
+                {{ form.submit(class="auth-submit", id="submitBtn") }}
+            </form>
+
+            <div class="auth-link">
+                <p>Já tem conta? <a href="{{ url_for('auth.login') }}">Faça login aqui</a></p>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        
+        // Toggle senha
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const icon = document.getElementById(fieldId + '-toggle-icon');
+            
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.textContent = 'Ocultar';
+            } else {
+                field.type = 'password';
+                icon.textContent = 'Mostrar';
+            }
+        }
+        
+        // Indicador de força da senha
+        document.getElementById('senha').addEventListener('input', function(e) {
+            const password = e.target.value;
+            const strengthContainer = document.getElementById('passwordStrength');
+            const strengthText = document.getElementById('passwordStrengthText');
+            
+            if (password.length === 0) {
+                strengthContainer.className = 'password-strength';
+                strengthText.textContent = '';
+                return;
+            }
+            
+            let strength = 0;
+            let criteria = [];
+            
+            if (password.length >= 6) {
+                strength++;
+                criteria.push('comprimento');
+            }
+            if (password.match(/[a-z]/)) {
+                strength++;
+                criteria.push('minúscula');
+            }
+            if (password.match(/[A-Z]/)) {
+                strength++;
+                criteria.push('maiúscula');
+            }
+            if (password.match(/[0-9]/)) {
+                strength++;
+                criteria.push('número');
+            }
+            if (password.match(/[^a-zA-Z0-9]/)) {
+                strength++;
+                criteria.push('símbolo');
+            }
+            
+            strengthContainer.className = 'password-strength';
+            
+            if (strength <= 2) {
+                strengthContainer.classList.add('password-strength-weak');
+                strengthText.textContent = 'Senha fraca';
+            } else if (strength <= 3) {
+                strengthContainer.classList.add('password-strength-medium');
+                strengthText.textContent = 'Senha média';
+            } else {
+                strengthContainer.classList.add('password-strength-strong');
+                strengthText.textContent = 'Senha forte';
+            }
+        });
+    </script>
+</body>
+</html>

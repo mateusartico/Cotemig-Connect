@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Cotemig Connect{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <h1>Bem-vindo, {{ session.user_nome }}!</h1>
+        <p>Tipo de usuário: <span class="user-type">{{ session.user_tipo.title() }}</span></p>
+        <a href="{{ url_for('auth.logout') }}" class="btn-secondary">Sair</a>
+    </div>
+    
+    <div class="dashboard-content">
+        <div class="feature-card">
+            <h3>Seu Perfil</h3>
+            <p>Gerencie suas informações pessoais</p>
+        </div>
+        
+        <div class="feature-card">
+            <h3>Conectar</h3>
+            <p>Encontre outros estudantes e professores</p>
+        </div>
+        
+        <div class="feature-card">
+            <h3>Atividades</h3>
+            <p>Veja suas atividades recentes</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.dashboard-header {
+    text-align: center;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+    color: var(--cotemig-green);
+    margin-bottom: 0.5rem;
+}
+
+.user-type {
+    background-color: var(--cotemig-green);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+}
+
+.dashboard-content {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+@media (min-width: 768px) {
+    .dashboard-content {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+</style>
+{% endblock %}
