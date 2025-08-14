@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Cotemig Connect</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/password-toggle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/auth.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components/password-toggle.css') }}">
 </head>
 <body>
     <div class="auth-container">
@@ -66,22 +66,6 @@
             </div>
         </div>
     </div>
-    <script>
-
-        
-        // Toggle senha
-        function togglePassword(fieldId) {
-            const field = document.getElementById(fieldId);
-            const icon = document.getElementById(fieldId + '-toggle-icon');
-            
-            if (field.type === 'password') {
-                field.type = 'text';
-                icon.textContent = 'Ocultar';
-            } else {
-                field.type = 'password';
-                icon.textContent = 'Mostrar';
-            }
-        }
-    </script>
+    <script src="{{ url_for('static', filename='js/pages/auth.js') }}"></script>
 </body>
 </html>

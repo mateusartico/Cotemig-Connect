@@ -2,6 +2,10 @@
 
 {% block title %}Dashboard - Cotemig Connect{% endblock %}
 
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <div class="dashboard-header">
@@ -27,37 +31,4 @@
         </div>
     </div>
 </div>
-
-<style>
-.dashboard-header {
-    text-align: center;
-    padding: 2rem 0;
-    margin-bottom: 2rem;
-}
-
-.dashboard-header h1 {
-    color: var(--cotemig-green);
-    margin-bottom: 0.5rem;
-}
-
-.user-type {
-    background-color: var(--cotemig-green);
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.875rem;
-}
-
-.dashboard-content {
-    display: grid;
-    gap: 1.5rem;
-    margin-top: 2rem;
-}
-
-@media (min-width: 768px) {
-    .dashboard-content {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    }
-}
-</style>
 {% endblock %}
